@@ -1,0 +1,22 @@
+{
+  "name": "testmu-sdet1-tannusharma",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanusharmaa15-rgb/testmu-sdet1-tannusharma.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanusharmaa15-rgb/testmu-sdet1-tannusharma/issues"
+  },
+  "homepage": "https://github.com/tanusharmaa15-rgb/testmu-sdet1-tannusharma#readme",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.0"
+  }
+}
