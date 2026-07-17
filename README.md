@@ -1,86 +1,90 @@
-# TestMu AI - SDET-1 Technical Assessment
+# AI-Native Playwright Test Automation Framework
 
-## Overview
-
-This repository contains my submission for the TestMu AI SDET-1 Assessment.
-
-The objective was to build an AI-native automation framework capable of combining Playwright automation with Large Language Models (Google Gemini) to improve regression testing and failure analysis.
+An AI-powered Playwright automation framework built using JavaScript. This project demonstrates modern QA automation practices by combining Playwright, REST API testing, Page Object Model (POM), GitHub Actions, and AI-assisted test generation.
 
 ---
 
-# Features
+## Features
 
-- Playwright Framework using JavaScript
-- Page Object Model (POM)
-- Login Automation
-- Dashboard Validation
+- UI Automation using Playwright
 - REST API Testing
-- AI Failure Explainer using Google Gemini
-- Screenshot Capture on Failure
-- AI-generated Gherkin Test Cases
-- Prompt Engineering Documentation
-- GitHub Actions Ready
+- Page Object Model (POM)
+- AI-generated Gherkin test cases
+- HTML Test Reports
+- Screenshot capture on failures
+- GitHub Actions CI/CD
+- Clean and scalable project structure
 
 ---
 
-# Tech Stack
+## Tech Stack
 
-- JavaScript
 - Playwright
+- JavaScript
 - Node.js
-- Google Gemini API
-- GitHub
+- REST APIs
 - GitHub Actions
+- OpenAI / LLM
 
 ---
 
-# Project Structure
+## Project Structure
 
 ```
-ai/
-api/
-generated-testcases/
-pages/
-reports/
 tests/
+pages/
 utils/
+reports/
+.github/workflows/
+playwright.config.js
+package.json
 README.md
-prompts.md
-ai-usage-log.md
 ```
 
 ---
 
-# AI Features
+## Installation
 
-When a Playwright test fails:
-
-1. Capture screenshot
-2. Collect failure information
-3. Send details to Google Gemini
-4. Generate root cause analysis
-5. Save explanation as Markdown report
+```bash
+git clone <repository-url>
+cd ai-playwright-test-automation-framework
+npm install
+```
 
 ---
 
-# Test Modules
+## Run Tests
 
-- Login Module
-- Dashboard Module
-- REST API Module
-
----
-
-# Future Enhancements
-
-- Self-Healing Locators
-- AI-based Flaky Test Classification
-- Autonomous Test Generation
-- CI/CD AI Failure Reporting
+```bash
+npx playwright test
+```
 
 ---
 
-# Author
+## Generate HTML Report
 
-**Tannu Sharma**
-QA Engineer | Automation Testing | Playwright | AI-assisted Quality Engineering
+```bash
+npx playwright show-report
+```
+
+---
+
+## AI Integration
+
+This framework demonstrates AI-assisted testing by generating Gherkin scenarios using an LLM to accelerate test design and improve coverage.
+
+---
+
+## CI/CD
+
+Tests execute automatically through GitHub Actions whenever code is pushed to the repository.
+
+---
+
+## Future Improvements
+
+- Self-healing locators
+- AI bug summarization
+- Flaky test detection
+- Visual regression testing
+- Cross-browser execution
