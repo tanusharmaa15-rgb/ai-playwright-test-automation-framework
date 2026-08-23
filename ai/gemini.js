@@ -1,32 +1,46 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from "dotenv";
-
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash",
-});
+export async function explainFailure({ error, url, title, screenshot }) {
+  if (!process.env.GEMINI_API_KEY) {
+    console.warn('[AI] GEMINI_API_KEY not set — skipping AI failure analysis');
+    return '# AI Analysis Skipped\n\nGEMINI_API_KEY environment variable is not configured.';
+  }
 
-export async function explainFailure(errorDetails) {
   const prompt = `
-You are a Senior Software Development Engineer in Test.
+You are a Senior SDET performing a root cause analysis on a Playwright test failure.
 
-Analyze the following Playwright test failure.
+## Failure Context
+- **Page URL:** ${url}
+- **Page Title:** ${title}
+- **Error Message:** ${error}
+- **Screenshot Path:** ${screenshot}
 
-Return:
+## Your Task
+Respond ONLY in the following markdown structure:
 
-1. What failed
-2. Probable root cause
-3. Suggested fix
+### What Failed
+One sentence describing the observable failure.
 
-Failure:
+### Root Cause (Probable)
+2-3 bullet points identifying likely causes.
 
-${errorDetails}
-`;
+### Suggested Fixes
+Numbered list of concrete code changes to investigate or apply.
 
-  const result = await model.generateContent(prompt);
+### Stability Improvements
+One improvement to make this test more resilient to flakiness.
+`.trim();
 
-  return result.response.text();
+  try {
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+  } catch (aiError) {
+    console.error('[AI] Gemini analysis failed:', aiError.message);
+    return `# AI Analysis Failed\n\nError: ${aiError.message}`;
+  }
 }

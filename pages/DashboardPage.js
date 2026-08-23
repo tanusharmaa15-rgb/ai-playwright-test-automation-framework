@@ -1,33 +1,48 @@
-import { expect } from "@playwright/test";
-
 export class DashboardPage {
   constructor(page) {
     this.page = page;
-
-    this.inventoryTitle = page.locator(".title");
-    this.inventoryItems = page.locator(".inventory_item");
-    this.sortDropdown = page.locator(".product_sort_container");
+    this.inventoryTitle = page.locator('.title');
+    this.inventoryItems = page.locator('.inventory_item');
+    this.sortDropdown = page.locator('[data-test="product-sort-container"]');
+    this.cartBadge = page.locator('.shopping_cart_badge');
+    this.productPrices = page.locator('.inventory_item_price');
+    this.addToCartButtons = page.locator('[data-test^="add-to-cart"]');
   }
 
   async verifyDashboardLoaded() {
-    await expect(this.inventoryTitle).toHaveText("Products");
+    await this.inventoryTitle.waitFor({ state: 'visible' });
+    const title = await this.inventoryTitle.textContent();
+    if (title.trim() !== 'Products') {
+      throw new Error(`Expected title "Products" but got "${title}"`);
+    }
   }
 
-  async verifyProductsDisplayed() {
-    await expect(this.inventoryItems.first()).toBeVisible();
+  async verifyProductsVisible() {
+    await this.inventoryItems.first().waitFor({ state: 'visible' });
   }
 
-  async verifyProductCount() {
-    const count = await this.inventoryItems.count();
+  async getProductCount() {
+    return this.inventoryItems.count();
+  }
 
-    expect(count).toBeGreaterThan(0);
+  async getProductPrices() {
+    const priceElements = await this.productPrices.allTextContents();
+    return priceElements.map(p => parseFloat(p.replace('$', '')));
   }
 
   async sortByPriceLowToHigh() {
-    await this.sortDropdown.selectOption("lohi");
+    await this.sortDropdown.selectOption('lohi');
   }
 
-  async verifySortDropdownVisible() {
-    await expect(this.sortDropdown).toBeVisible();
+  async sortByPriceHighToLow() {
+    await this.sortDropdown.selectOption('hilo');
+  }
+
+  async addFirstProductToCart() {
+    await this.addToCartButtons.first().click();
+  }
+
+  async getCartCount() {
+    return this.cartBadge.textContent();
   }
 }

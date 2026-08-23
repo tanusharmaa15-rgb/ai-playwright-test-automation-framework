@@ -1,25 +1,42 @@
-import { test } from "@playwright/test";
+import { test, expect } from '../fixtures/index.js';
+import testData from '../test-data/users.json' assert { type: 'json' };
 
-import { LoginPage } from "../pages/LoginPage.js";
-import { DashboardPage } from "../pages/DashboardPage.js";
+test.describe('@smoke Dashboard Module', () => {
 
-test("Dashboard Validation", async ({ page }) => {
-  const login = new LoginPage(page);
-  const dashboard = new DashboardPage(page);
+  test.beforeEach(async ({ loginPage, dashboardPage }) => {
+    await loginPage.navigate();
+    await loginPage.login(testData.standardUser.username, testData.standardUser.password);
+    await loginPage.verifySuccessfulLogin();
+  });
 
-  await login.navigate();
+  test('dashboard shows Products heading', async ({ dashboardPage }) => {
+    await dashboardPage.verifyDashboardLoaded();
+  });
 
-  await login.login("standard_user", "secret_sauce");
+  test('all 6 products are visible', async ({ dashboardPage }) => {
+    await dashboardPage.verifyProductsVisible();
+    const count = await dashboardPage.getProductCount();
+    expect(count).toBe(6);
+  });
 
-  await login.verifySuccessfulLogin();
+  test('@regression sort by price low to high reorders products', async ({ dashboardPage }) => {
+    await dashboardPage.sortByPriceLowToHigh();
+    const prices = await dashboardPage.getProductPrices();
+    const sorted = [...prices].sort((a, b) => a - b);
+    expect(prices).toEqual(sorted);
+  });
 
-  await dashboard.verifyDashboardLoaded();
+  test('@regression sort by price high to low reorders products', async ({ dashboardPage }) => {
+    await dashboardPage.sortByPriceHighToLow();
+    const prices = await dashboardPage.getProductPrices();
+    const sorted = [...prices].sort((a, b) => b - a);
+    expect(prices).toEqual(sorted);
+  });
 
-  await dashboard.verifyProductsDisplayed();
+  test('@regression add first product to cart updates cart badge', async ({ dashboardPage }) => {
+    await dashboardPage.addFirstProductToCart();
+    const cartCount = await dashboardPage.getCartCount();
+    expect(cartCount).toBe('1');
+  });
 
-  await dashboard.verifyProductCount();
-
-  await dashboard.verifySortDropdownVisible();
-
-  await dashboard.sortByPriceLowToHigh();
 });

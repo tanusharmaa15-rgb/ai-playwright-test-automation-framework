@@ -3,7 +3,16 @@
   "type": "module",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test",
+    "test:smoke": "npx playwright test --grep @smoke",
+    "test:regression": "npx playwright test --grep @regression",
+    "test:api": "npx playwright test tests/api.spec.js",
+    "test:ui": "npx playwright test tests/login.spec.js tests/dashboard.spec.js",
+    "test:chromium": "npx playwright test --project=chromium",
+    "test:ci": "CI=true npx playwright test",
+    "report": "npx playwright show-report reports/html"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tanusharmaa15-rgb/testmu-sdet1-tannusharma.git"
@@ -22,6 +31,8 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "dotenv": "^17.4.2"
+    "dotenv": "^17.4.2",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1"
   }
 }
