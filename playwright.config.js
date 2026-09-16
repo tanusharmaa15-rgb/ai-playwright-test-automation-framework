@@ -29,10 +29,13 @@ export default defineConfig({
   },
 
   projects: [
-    // Setup project — saves auth state once, reused by all tests
+    // Setup project — saves auth state once, reused by all tests.
+    // Authentication runs in Chromium, so CI must install Chromium even
+    // when the test matrix is running Firefox or WebKit.
     {
       name: 'setup',
       testMatch: /global\.setup\.js/,
+      use: { ...devices['Desktop Chrome'] },
     },
     {
       name: 'chromium',
